@@ -1,72 +1,78 @@
 <div class="pagetitle">
-  <h1>Dashboard - Properties</h1> <br>
+  <h1>Products </h1> <br>
 </div><!-- End Page Title -->
 
 <section class="section dashboard">
   <div class="row">
 
     <!-- Left side columns -->
-    <div class="col-lg-8">
-      <div class="row overflow-auto" style="height: 109vh;">
+    <div class="col-lg-9 overflow-auto" style="height: 109vh;">
+      <div class="row ">
 
         <!-- Sales Card -->
+        <% if (userProd=='' ) { %>
 
-        <% if (userProp=='' ) { %>
-          <br> <br>
           <h3 class="m-5 text-center mb-5">There is no property at the moment</h3>
-
           <% } else{%>
-            <% userProp.forEach(trans=> { %>
-
+            <% userProd.forEach(trans=> { %>
               <div class="col-xxl-6 col-xl-12">
-                <!-- /assets/img/card.jpg -->
-
-                <a href="/user/property-zZkKqQP/<%= trans.id %>" class="text-dark">
-                  <div class="card">
-                    <div class="container-fluid"> <br>
-                      <% if (trans.picture) { %>
-                        <% let pixz=trans.picture.split(',') %>
-
-                          <img src="<%= pixz ? '/prop/'+pixz[0] : '/assets/img/card.jpg' %>" class="d-block w-100"
-                            alt="Property Image">
-
-                          <% } %>
-                    </div>
-                    <div class="card-body mt-2">
-                      <h5 class="card-title">
-                        <b>
-                          <%= trans.title.substring(0, 21)+( trans.title.length>21?'...': "") %>
-                        </b>
-                      </h5>
-                      <h6 class="card-subtitle mb-2 text-muted"><span><br>
-                          <%= new Date(trans.created_at).toLocaleString('en-GB',{year : 'numeric' , month:'short', day
-                            :'2-digit'}) %> ||
-                            <%= new Date(trans.created_at).toLocaleTimeString() %>
-                        </span></h6>
-                      <p class="card-text mb-3 text-capitalize">
-                        <%= trans.category %> Property.
-                      </p>
-                      <p class=" text-capitalize">Location : <%= trans.location %>
-                      </p>
-
-                      <a href="/user/save/<%= trans.id %>" class="btn btn-primary btn-sm">Archive</a>
-                      <a href="#" class="card-link">Another link</a>
-                    </div>
-
+                <div class="card info-card customers-card">
+                  <div class="filter">
+                    <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                      <li class="dropdown-header text-start">
+                        <h6>Option</h6>
+                      </li>
+                      <li><a href="/user/save/<%= trans.id %>" class="dropdown-item"><i class="bi bi-cart"></i> Add
+                          To
+                          Cart</a>
+                      </li>
+                      <li> <a href="/user/product-zZkKqQP/<%= trans.id %>" class="text-dark dropdown-item"><i
+                            class="bi bi-card-text"></i>View Details
+                      </li>
+                    </ul>
                   </div>
-                </a>
+                  <a href="/user/product-zZkKqQP/<%= trans.id %>" class="text-dark">
+                    <div class="card-body">
+                      <h5 class="card-title text-capitalize"> Available Quantity <span>| <%= trans.quantity %>
+                        </span>
+                      </h5>
+                      <div class="d-flex align-items-center">
+                        <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                          <% if (trans.picture) { %>
+                            <% let pixz=trans.picture.split(',') %>
 
+                              <img src="<%= pixz ? '/products/'+pixz[0] : 'assets/img/card.jpg' %>"
+                                class="d-block w-100" alt="Property Image">
+                              <% } else{ %>
+                                <img src="/assets/img/card.jpg" class="d-block w-100" alt="Property Image">
+                                <% } %>
+                        </div>
+                        <div class="ps-3">
+                          <h6 class="text-capitalize">
+                            <%= trans.title.substring(0, 21)+( trans.title.length>21?'...': "") %>
+                          </h6>
+                          <span class="text-success small pt-1 fw-bold text-capitalize">Category : <%= trans.category %>
+                          </span> <span class="text-muted small pt-2 ps-1">
+                            <%= new Date(trans.created_at).toLocaleString('en-GB',{year : 'numeric' , month:'short', day
+                              :'2-digit'}) %> ||
+                              <%= new Date(trans.created_at).toLocaleTimeString() %>
+                          </span>
+
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
               </div><!-- End Customers Card -->
-
               <% }) %>
                 <% } %>
-
       </div>
     </div><!-- End Left side columns -->
 
 
     <!-- Right side columns -->
-    <div class="col-lg-4">
+    <div class="col-lg-3">
 
       <div class="card info-card revenue-card">
         <div class="card-body">

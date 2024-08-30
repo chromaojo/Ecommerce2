@@ -9,6 +9,8 @@ const random = Math.floor(Math.random() * 99999);
 const rando = Math.floor(Math.random() * 99999);
 const rand = rando + "FTL" + random;
 
+
+
 // username, surname, othername, phone_number, address
 
 // To create User and Account 
@@ -16,39 +18,40 @@ const rand = rando + "FTL" + random;
 route.post('/register', (req, res) => {
     const { email, password, password1, surname, othername, username, address, phone_number } = req.body;
 
-    db.query('SELECT email FROM realEstate.re_users WHERE email = ?', [email], async (error, result) => {
+    db.query('SELECT email FROM ecommerce.ec_users WHERE email = ?', [email], async (error, result) => {
         if (error) { console.log("Customized Error ", error); }
         if (result.length > 0) {
             return res.status(401).json({
                 message: 'Email Already Taken'
             })
         } else if (password == password1) {
-            const user_id = 'rE' + random + 'sT'
+            const user_id = 'eC' + random + 'Ac'
             const hashedPassword = await bcrypt.hash(password, 10);
-            db.query('INSERT INTO realEstate.re_users SET ?', { email: email, password: hashedPassword, user_id }, (error, result) => {
+            db.query('INSERT INTO ecommerce.ec_users SET ?', { email: email, password: hashedPassword, user_id }, (error, result) => {
                 if (error) {
                     console.log('A Registeration Error Occured ', error);
                 } else {
+
                     // const messages = {
                     //     from: {
-                    //         name: 'realEstate INTERNATIONAL',
+                    //         name: 'Product Biz Software',
                     //         address: 'felixtemidayoojo@gmail.com',
                     //     },
                     //     to: email,
-                    //     subject: "Welcome To Real Est Logistics",
-                    //     text: `Welcome to Real Est INT'L, \n \n  Your Real Est Account has been opened successfully . \n Ensure that Your Password is kept safe. Incase of any compromise, ensure you change or optimizee the security on your application.`,
+                    //     subject: "Welcome To Product Biz App",
+                    //     text: `<b> Dear New User, Welcome to Product Biz INT'L,</b> \n \n  Your Real Est Account has been opened successfully . \n Ensure that Your Password is kept safe. Incase of any compromise, ensure you change or optimizee the security on your application.`,
                     // }
                     // mail.sendIt(messages)
 
                     // To create the account table into the user 
-                    db.query('SELECT * FROM realEstate.re_users WHERE email = ?', [email], async (error, result) => {
+                    db.query('SELECT * FROM ecommerce.ec_users WHERE email = ?', [email], async (error, result) => {
                         if (error) {
 
                             return res.status(500).json({
                                 message: 'Internal Server Error'
                             });
                         } else {
-                            db.query('INSERT INTO realEstate.re_accounts SET ?', { user_id: result[0].user_id, email: email, account_id: rand, account_balance: 0, surname: surname, othername: othername, username: username, address: address, phone_number: phone_number });
+                            db.query('INSERT INTO ecommerce.ec_accounts SET ?', { user_id: result[0].user_id, email: email, account_id: rand, account_balance: 0, surname: surname, othername: othername, username: username, address: address, phone_number: phone_number });
                         }
                     });
 
@@ -76,7 +79,7 @@ route.get('/profile', UserLoggin, (req, res) => {
     if (!userCookie) {
         res.redirect('/login');
     } else {
-        const user = db.query('SELECT * FROM realEstate.re_users WHERE email = ?', [userData.email], async (error, result) => {
+        const user = db.query('SELECT * FROM ecommerce.ec_users WHERE email = ?', [userData.email], async (error, result) => {
 
             // console.log('This is the dashboard Details : ', userData);
             if (error) {
@@ -98,7 +101,7 @@ route.post('/surname', UserLoggin, async (req, res) => {
     if (surname) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET surname = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET surname = ?  WHERE email = ?';
             let values = [surname, userData.email];
 
             db.query(updateUsername, values, (error, result) => {
@@ -122,8 +125,8 @@ route.post('/surname', UserLoggin, async (req, res) => {
                 a.username,
                 a.address,
                 a.email as account_email
-            FROM realestate.re_users u
-            LEFT JOIN realestate.re_accounts a ON u.user_id = a.user_id
+            FROM ecommerce.ec_users u
+            LEFT JOIN ecommerce.ec_accounts a ON u.user_id = a.user_id
             WHERE u.email = ?;
             `;
                 db.query(sqlGetUserWithAccount, [userData.email], async (error, result) => {
@@ -166,7 +169,7 @@ route.post('/username', UserLoggin, async (req, res) => {
     if (username) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET username = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET username = ?  WHERE email = ?';
             let values = [username, userData.email];
 
             db.query(updateUsername, values, (error, result) => {
@@ -190,8 +193,8 @@ route.post('/username', UserLoggin, async (req, res) => {
                 a.username,
                 a.address,
                 a.email as account_email
-            FROM realestate.re_users u
-            LEFT JOIN realestate.re_accounts a ON u.user_id = a.user_id
+            FROM ecommerce.ec_users u
+            LEFT JOIN ecommerce.ec_accounts a ON u.user_id = a.user_id
             WHERE u.email = ?;
             `;
                 db.query(sqlGetUserWithAccount, [userData.email], async (error, result) => {
@@ -234,7 +237,7 @@ route.post('/other', UserLoggin, async (req, res) => {
     if (othername) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET othername = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET othername = ?  WHERE email = ?';
             let values = [othername, userData.email];
 
             db.query(updateUsername, values, (error, result) => {
@@ -258,8 +261,8 @@ route.post('/other', UserLoggin, async (req, res) => {
                     a.username,
                     a.address,
                     a.email as account_email
-                FROM realestate.re_users u
-                LEFT JOIN realestate.re_accounts a ON u.user_id = a.user_id
+                FROM ecommerce.ec_users u
+                LEFT JOIN ecommerce.ec_accounts a ON u.user_id = a.user_id
                 WHERE u.email = ?;
                 `;
                 db.query(sqlGetUserWithAccount, [userData.email], async (error, result) => {
@@ -302,7 +305,7 @@ route.post('/phone_number', UserLoggin, async (req, res) => {
     if (phone_number) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET phone_number = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET phone_number = ?  WHERE email = ?';
             let values = [phone_number, userData.email];
 
             db.query(updateUsername, values, (error, result) => {
@@ -326,8 +329,8 @@ route.post('/phone_number', UserLoggin, async (req, res) => {
                 a.username,
                 a.address,
                 a.email as account_email
-            FROM realestate.re_users u
-            LEFT JOIN realestate.re_accounts a ON u.user_id = a.user_id
+            FROM ecommerce.ec_users u
+            LEFT JOIN ecommerce.ec_accounts a ON u.user_id = a.user_id
             WHERE u.email = ?;
             `;
                 db.query(sqlGetUserWithAccount, [userData.email], async (error, result) => {
@@ -370,7 +373,7 @@ route.post('/address', UserLoggin, async (req, res) => {
     if (address) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET address = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET address = ?  WHERE email = ?';
             let values = [address, userData.email];
 
             db.query(updateUsername, values, (error, result) => {
@@ -394,8 +397,8 @@ route.post('/address', UserLoggin, async (req, res) => {
                     a.username,
                     a.address,
                     a.email as account_email
-                FROM realestate.re_users u
-                LEFT JOIN realestate.re_accounts a ON u.user_id = a.user_id
+                FROM ecommerce.ec_users u
+                LEFT JOIN ecommerce.ec_accounts a ON u.user_id = a.user_id
                 WHERE u.email = ?;
                 `;
                 db.query(sqlGetUserWithAccount, [userData.email], async (error, result) => {
@@ -439,7 +442,7 @@ route.post('/password', UserLoggin, async (req, res) => {
     if (password) {
         try {
             const userData = req.app.get('userData');
-            let updateUsername = 'UPDATE realestate.re_accounts SET password = ?  WHERE email = ?';
+            let updateUsername = 'UPDATE ecommerce.ec_accounts SET password = ?  WHERE email = ?';
             let values = [password, userData.email];
 
             db.query(updateUsername, values, (error, result) => {

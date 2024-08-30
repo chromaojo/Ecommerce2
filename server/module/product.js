@@ -14,11 +14,11 @@ const session = require('express-session');
 
  
 // MiDDLE WARES 
-// Configure multer for file storage in 'prop' directory
+// Configure multer for file storage in 'Prod' directory
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-        cb(null, 'public/prop/');
-        // cb(null, path.join(__dirname, 'prop'));
+        cb(null, 'public/products/');
+        // cb(null, path.join(__dirname, 'Produts'));
     },
     filename: function (req, file, cb) {
         cb(null, Date.now() + '-' + file.originalname);
@@ -37,15 +37,15 @@ const upload = multer({
 
 
 
-// To View All Properties
-const allProp = (req, res)=>{
+// To View All Produts
+const allProd = (req, res)=>{
     
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products ORDER BY id DESC;
     `;
 
         db.query(sql,  (err, results) => {
@@ -56,9 +56,9 @@ const allProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -69,17 +69,17 @@ const allProp = (req, res)=>{
     }
 };
 
-// To View All Commercial Properties
-const allComProp = (req, res)=>{
+// To View All Commercial Produts
+const allComProd = (req, res)=>{
     
     const category = 'commercial'
-    
+    const messages = ''
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE category = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products WHERE category = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [category], (err, results) => {
@@ -90,9 +90,9 @@ const allComProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info, messages });
             }
 
         })
@@ -103,8 +103,8 @@ const allComProp = (req, res)=>{
     }
 };
 
-// To View All Residentioal Properties
-const allResProp = (req, res)=>{
+// To View All Residentioal Produts
+const allResProd = (req, res)=>{
     
     const category = 'residential'
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
@@ -112,7 +112,7 @@ const allResProp = (req, res)=>{
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products ORDER BY id DESC;
     `;
 
         db.query(sql, [category] ,(err, results) => {
@@ -123,9 +123,9 @@ const allResProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -136,18 +136,18 @@ const allResProp = (req, res)=>{
     }
 };
 
-// To View All shortlet Properties
-const allShortProp = (req, res)=>{
-    const prop_type = 'shortlet'
+// To View All shortlet Produts
+const allShortProd = (req, res)=>{
+    const Prod_type = 'shortlet'
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE prop_type = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products WHERE Prod_type = ? ORDER BY id DESC;
     `;
 
-        db.query(sql, [prop_type], (err, results) => {
+        db.query(sql, [Prod_type], (err, results) => {
             if (err) {
                 console.log('Login Issues :', err);
                 return res.status(500).send('Internal Server Error');
@@ -155,9 +155,9 @@ const allShortProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -168,15 +168,15 @@ const allShortProp = (req, res)=>{
     }
 };
 
-// To View All Rented Properties
-const allRentProp = (req, res)=>{
+// To View All Rented Produts
+const allRentProd = (req, res)=>{
     const action = 'rent'
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE action = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products WHERE action = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [action], (err, results) => {
@@ -187,9 +187,9 @@ const allRentProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -200,15 +200,15 @@ const allRentProp = (req, res)=>{
     }
 };
 
-// To View All Lease Properties
-const allLeaseProp = (req, res)=>{
+// To View All Lease Produts
+const allLeaseProd = (req, res)=>{
     const action = 'lease'
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE action = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products WHERE action = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [action], (err, results) => {
@@ -219,9 +219,9 @@ const allLeaseProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -232,15 +232,15 @@ const allLeaseProp = (req, res)=>{
     }
 };
 
-// To View All sSale Properties
-const allSaleProp = (req, res)=>{
+// To View All sSale Produts
+const allSaleProd = (req, res)=>{
     const action = 'sale'
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
     if (userCookie){
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE action = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_products WHERE action = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [action], (err, results) => {
@@ -251,9 +251,9 @@ const allSaleProp = (req, res)=>{
           
             
             if (results) {
-                const userProp = results
+                const userProd = results
                 const userData = userCookie
-                return res.render('index', { userData, userProp, info });
+                return res.render('index', { userData, userProd, info });
             }
 
         })
@@ -267,9 +267,9 @@ const allSaleProp = (req, res)=>{
 
 
 
-// To view only one property 
+// To view only one Product 
 
-const oneProp = (req, res)=>{
+const oneProd = (req, res)=>{
     
     const id = req.params.id;
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
@@ -279,7 +279,7 @@ const oneProp = (req, res)=>{
         res.redirect('/logout');
     } else {
         const sql = `
-      SELECT * FROM realEstate.re_property WHERE id =?;
+      SELECT * FROM ecommerce.ec_products WHERE id =?;
     `;
 
         db.query(sql, [id], (err, results) => {
@@ -290,21 +290,29 @@ const oneProp = (req, res)=>{
             console.log('This is the dashboard Details : ', userData);
             
             if (results) {
-                const userProp = results[0]
-                console.log('Properties are ',userProp)
-                res.render('prop-one', { userData, userProp, info });
+                const userProd = results[0]
+                console.log('Produts are ',userProd)
+                res.render('Prod-one', { userData, userProd, info });
             }
 
         })
     }
 };
 
+// To gat Create Product
+const getCreate = (req, res) => {
+
+    const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
+
+    const userData = userCookie
+    res.render('prod-create', { userData })
+};
 
 
 
 
-// To Post property form from the frontend 
-const createProp = (req, res) => {
+// To Post Product form from the frontend 
+const createProd = (req, res) => {
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
 
     const userData = userCookie
@@ -316,22 +324,22 @@ const createProp = (req, res) => {
             }
     
  
-            const { title , description, prop_type, category, action , price, location } = req.body;
+            const { title , price , description, category ,quantity } = req.body;
            
-            let prop_id = rando || random
+            let prod_id = rando || random
             const pixz = req.files.map(file => file.filename);
-            const prop_status ='active'
+            const status ='active'
             const picture = pixz;
 
             // Now you can handle the name, age, address, and pictures array
             // For example, save them to a database, send to another API, etc.
 
-            db.query('INSERT INTO realEstate.re_property SET ?', { title, prop_id, picture , description, prop_type, category, action ,prop_status, price, location });
+            db.query('INSERT INTO ecommerce.ec_products SET ?', { title , price , description, category, quantity, prod_id, picture, status  });
            res.redirect('/user/dashboard')
         });
        
     } catch (error) {
-        console.log('Property Form Error :', error)
+        console.log('Product Form Error :', error)
     }
    
 }
@@ -339,10 +347,10 @@ const createProp = (req, res) => {
  
 
 
-// To delete a property content
+// To delete a Product content
 
 
-const deleteProp = (req, res, next) => {
+const deleteProd = (req, res, next) => {
 
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
@@ -352,15 +360,15 @@ const deleteProp = (req, res, next) => {
         try {
             const id = req.params.id;
             // Perform the deletion
-            const sql = `DELETE FROM jvmc.re_property WHERE id = ?;`;
+            const sql = `DELETE FROM jvmc.re_Product WHERE id = ?;`;
             db.query(sql, [id], (err, result) => {
                 if (err) {
-                    console.error('Error deleting Property:', err);
+                    console.error('Error deleting Product:', err);
                     return res.status(500).send('Internal Server Error');
                 }
                 // Check if any rows were affected
                 if (result.affectedRows === 0) {
-                    return res.status(404).send('property content not found');
+                    return res.status(404).send('Product content not found');
                 }
 
             });
@@ -373,10 +381,10 @@ const deleteProp = (req, res, next) => {
 
 
     } else {
-        res.send('Cannot Delete This Property')
+        res.send('Cannot Delete This Product')
     }
 };
 
 
 
-module.exports = {oneProp, allProp, deleteProp, createProp, allLeaseProp, allSaleProp, allRentProp, allShortProp, allResProp, allComProp}
+module.exports = {oneProd, allProd, deleteProd, createProd, allLeaseProd, allSaleProd, allRentProd, allShortProd, allResProd, allComProd}

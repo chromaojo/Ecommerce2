@@ -1,0 +1,83 @@
+<div class="pagetitle">
+  <h1>Products - Cart <i class="bi bi-cart p-2"></i></h1> <br>
+</div><!-- End Page Title -->
+
+<section class="section dashboard">
+  <div class="row">
+
+    <% if (userCart=='' ) { %>
+      <br> <br>
+      <h3 class="m-5 text-center mb-5">There is no products in the Cart</h3>
+
+      <% } else{%>
+        <div class="col-12">
+          <div class="card top-selling overflow-auto">
+            <div class="card-body pb-0">
+              <h5 class="card-title">My Cart <span>| Today</span></h5>
+
+              <table class="table table-borderless">
+                <thead>
+                  <tr>
+                    <th scope="col">Preview</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price (NGN)</th>
+                    <th scope="col">Available</th>
+                    <th scope="col">Quantity Ordered</th>
+                    <th scope="col">Remove</th>
+                    <th scope="col">Approve</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <% userCart.forEach(trans=> { %>
+                    <a href="<%= trans.pro_link %>" class="text-dark"></a>
+                    <tr>
+                      <th scope="row"><a href="#">
+                          <img src="<%= trans.picture ? '/products/'+trans.picture :'/assets/img/card.jpg'%>"
+                            width="100%" class="p-3 pt-4" alt="products picture">
+                        </a></th>
+                      <td><a href="#" class="text-primary fw-bold">
+                          <%= trans.title.substring(0, 17)+( trans.title.length>17?'...': "") %>
+                        </a></td>
+                      <td>
+                        <%= trans.price %>
+                      </td>
+                      <td class="fw-bold">
+                        <%= trans.quantity %>
+                      </td>
+                      <form action="">
+                        <td>
+                          <input type="number" max="<%= trans.quantity %>" min="0" required>
+                        </td>
+                        <td>
+                          <a href="/user/delet/<%= trans.prod_id %>" class="btn btn-sm btn-outline-danger">Remove
+                            Item</a>
+                        </td>
+                        <td>
+                          <button href="" class="btn btn-sm btn-outline-success">Pay </button>
+                        </td>
+                      </form>
+                    </tr>
+                    <% }) %>
+                    <tr>
+                      <% let total = 0 %>
+                      <% userCart.forEach(trans=> { %>
+                      <% total += trans.price %>
+                      <% }) %>
+                      <td>Total</td>
+                      <td>Price Per Unit</td>
+                      <td><%= total %></td>                     
+                    </tr>
+                    <tr> <td></td> <td></td> <td></td> <td></td>
+                      <td><a href="" class="btn btn-primary">Checkout Irems </a></td>
+                    </tr>
+                    
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div><!-- End Top Selling -->
+        <% } %>
+
+  </div>
+</section>

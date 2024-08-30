@@ -14,7 +14,7 @@ const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: 'Oluchroma234',
-  database: 'realEstate',
+  database: 'ecommerce',
   waitForConnections: true,
 
 });

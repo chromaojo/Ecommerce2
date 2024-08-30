@@ -23,7 +23,7 @@ const allRept = (req, res) => {
 
     if (userCookie) {
         const sql = `
-      SELECT * FROM realEstate.re__report ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_report ORDER BY id DESC;
     `;
 
         db.query(sql, (err, results) => {
@@ -54,7 +54,7 @@ const allMyRept = (req, res) => {
     req.app.set('userData', userCookie);
     const user_id = userCookie.user_id;
     if (userCookie) {
-        const sql = `SELECT * FROM realEstate.re__report WHERE user_id = ? ORDER BY id DESC;`;
+        const sql = `SELECT * FROM ecommerce.ec_report WHERE user_id = ? ORDER BY id DESC;`;
 
         db.query(sql, [user_id], (err, results) => {
             if (err) {
@@ -83,12 +83,12 @@ const oneRept = (req, res) => {
     const report_id = req.params.report_id;
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
 
-    console.log('My Reort id is ' + report_id)
+  
     const userData = userCookie
     if (!userCookie) {
         res.redirect('/logout');
     } else {
-        db.query('SELECT * FROM realEstate.re__report WHERE report_id =?', [report_id], (err, result) => {
+        db.query('SELECT * FROM ecommerce.ec_report WHERE report_id =?', [report_id], (err, result) => {
             if (err) {
                 res.send('Errors viewing Report')
                 console.log('Viewing error ' + err)
@@ -96,7 +96,7 @@ const oneRept = (req, res) => {
 
             const userReport = result[0]
             const sql = `
-      SELECT * FROM realEstate.re__content WHERE report_id =?;
+      SELECT * FROM ecommerce.ec__content WHERE report_id =?;
     `;
 
             db.query(sql, [report_id], (err, results) => {
@@ -120,20 +120,6 @@ const oneRept = (req, res) => {
 
 
 
-// To Get report form 
-const createRepts = (req, res) => {
-
-    const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
-    req.app.set('userData', userCookie);
-
-    if (userCookie) {
-        return next();
-
-    } else {
-        return res.status(401).redirect('/user/logout');
-    }
-};
-
 // To Post shipment form from the frontend 
 const createRept = (req, res, next) => {
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
@@ -145,30 +131,16 @@ const createRept = (req, res, next) => {
 
 
     try {
-        db.query('INSERT INTO realEstate.re_report SET ?', { title, description, Rept_status, price, location });
+        db.query('INSERT INTO ecommerce.ec_report SET ?', { title, description, Rept_status, price, location });
 
         res.json("Form Successfully Submitted")
     } catch (error) {
         console.log('Shipment Form Error :', error)
     }
 
-    res.json('Added Successfully');
 }
 
 
-// To get each User's Shipment Query 
-const UserLoggi = (req, res, next) => {
-
-    const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
-    req.app.set('userData', userCookie);
-
-    if (userCookie) {
-        return next();
-
-    } else {
-        return res.status(401).redirect('/user/logout');
-    }
-};
 
 
 // To delete a report content
@@ -184,14 +156,14 @@ const deleteRept = (req, res, next) => {
         try {
             const report_id = req.params.report_id;
             // Perform the deletion
-            const sql = `DELETE FROM realEstate.re__content WHERE report_id = ?;`;
+            const sql = `DELETE FROM ecommerce.ec__content WHERE report_id = ?;`;
             db.query(sql, [report_id], (err, result) => {
                 if (err) {
                     console.error('Error deleting report:', err);
                     return res.status(500).send('Internal Server Error');
                 }
                 
-                const sql = `DELETE FROM realEstate.re__report WHERE report_id = ?;`;
+                const sql = `DELETE FROM ecommerce.ec_report WHERE report_id = ?;`;
                 db.query(sql, [report_id], (err, result) => {
                     if (err) {
                         console.error('Error deleting report:', err);

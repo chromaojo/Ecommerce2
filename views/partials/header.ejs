@@ -3,8 +3,8 @@
 
     <div class="d-flex align-items-center justify-content-between">
       <a href="/user/dashboard" class="logo d-flex align-items-center">
-        <img src="/assets/img/logo.png" alt="">
-        <span class="d-none d-lg-block">Real Estate</span>
+        <i class="bi bi-cart p-2"></i>
+        <span class="d-none d-lg-block"><%= info.name %></span>
       </a>
       <i class="bi bi-list toggle-sidebar-btn"></i>
     </div><!-- End Logo -->
@@ -248,9 +248,9 @@
         </a>
       </li><!-- End Dashboard Nav -->
       <li class="nav-item">
-        <a class="nav-link collapsed"  href="/user/saved">
-          <i class="bi bi-folder"></i>
-          <span>My Archive </span>
+        <a class="nav-link collapsed"  href="/user/Cart">
+          <i class="bi bi-cart"></i>
+          <span>My Cart </span>
         </a>
       </li><!-- End Dashboard Nav -->
 
@@ -261,40 +261,6 @@
         </a>
       </li><!-- End Dashboard Nav -->
         
-   
-      <li class="nav-item">
-        <a class="nav-link collapsed" data-bs-target="#charts-nav" data-bs-toggle="collapse" href="#">
-          <i class="bi bi-bar-chart"></i><span>Investment</span><i class="bi bi-chevron-down ms-auto"></i>
-        </a>
-        <ul id="charts-nav" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-          <li>
-            <a href="/user/investments">
-              <i class="bi bi-circle"></i><span>View All</span>
-            </a>
-          </li>
-          <li>
-            <a href="#">
-              <i class="bi bi-circle"></i><span>My Investments</span>
-            </a>
-          </li>
-          <li>
-            <a href="/user/investe">
-              <i class="bi bi-circle"></i><span>Create New</span>
-            </a>
-          </li>
-        </ul>
-      </li><!-- End Charts Nav -->
-      
-      
-      <li class="nav-item">
-        <a class="nav-link collapsed"  href="/user/mYlead/wWwCcYtT">
-          <i class="bi bi-book-half"></i>
-          <span>Leads</span>
-        </a>
-      </li><!-- End User Nav -->
-
-     
-
       <li class="nav-item">
         <a class="nav-link collapsed"  href="/user/transactions">
           <i class="bi bi-currency-exchange"></i>
@@ -314,18 +280,12 @@
       <li class="nav-heading">Admin</li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed"  href="/user/create/prop">
+        <a class="nav-link collapsed"  href="/user/create/prod">
           <i class="bi bi-bank"></i>
-          <span>Create Property </span>
+          <span>Create Product </span>
         </a>
       </li><!-- End Dashboard Nav -->
 
-      <li class="nav-item">
-        <a class="nav-link collapsed"  href="/user/investe">
-          <i class="bi bi-bank"></i>
-          <span>Create Investment </span>
-        </a>
-      </li><!-- End Dashboard Nav -->
       <li class="nav-item">
         <a class="nav-link collapsed" data-bs-target="#tables-nav" data-bs-toggle="collapse" href="#">
           <i class="bi bi-layout-text-window-reverse"></i><span>Report</span><i class="bi bi-chevron-down ms-auto"></i>

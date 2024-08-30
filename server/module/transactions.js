@@ -5,8 +5,8 @@ const path = require("path");
 const db = require('../config/db');
 const bcrypt = require('bcryptjs');
 const { UserLoggin, AvoidIndex, AdminRoleBased } = require('../auth/auth');
-const random = Math.floor(Math.random() * 99999);
-const rando = Math.floor(Math.random() * 99999);
+let random = Math.floor(Math.random() * 999998999);
+let rando = Math.floor(Math.random() * 99999999);
 const rand = rando + "FTL" + random;
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -22,9 +22,7 @@ const allTrans = (req, res)=>{
     req.app.set('userData', userCookie);
     
     if (userCookie){
-        const sql = `
-      SELECT * FROM realEstate.re_transaction ORDER BY id DESC;
-    `;
+        const sql = `SELECT * FROM ecommerce.ec_transaction ORDER BY id DESC;`;
 
         db.query(sql,  (err, results) => {
             if (err) {
@@ -61,7 +59,7 @@ const oneTrans = (req, res, next)=>{
         res.redirect('/logout');
     } else {
         const sql = `
-      SELECT * FROM realEstate.re_transaction WHERE id =?;
+      SELECT * FROM ecommerce.ec_transaction WHERE id =?;
     `;
 
         db.query(sql, [id], (err, results) => {
@@ -108,7 +106,7 @@ const createTrans = (req, res, next) => {
     
 
     try {
-        db.query('INSERT INTO realEstate.re_transaction SET ?', { title , description ,Trans_status, price, location  });
+        db.query('INSERT INTO ecommerce.ec_transaction SET ?', { title , description ,Trans_status, price, location  });
 
         res.json("Form Successfully Submitted")
     } catch (error) {

@@ -23,7 +23,7 @@ const allComplain = (req, res) => {
 
     if (userCookie) {
         const sql = `
-      SELECT * FROM realEstate.re_complaint ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_complaint ORDER BY id DESC;
     `;
 
         db.query(sql, [userId], (err, results) => {
@@ -57,7 +57,7 @@ const allMyComplain = (req, res) => {
 
     if (userCookie) {
         const sql = `
-      SELECT * FROM realEstate.re_complaint WHERE user_id = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_complaint WHERE user_id = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [userId], (err, results) => {
@@ -95,7 +95,7 @@ const oneComplain = (req, res) => {
         res.redirect('/logout');
     } else {
         const sql = `
-      SELECT * FROM realEstate.re_complaint WHERE id =?;
+      SELECT * FROM ecommerce.ec_complaint WHERE id =?;
     `;
 
         db.query(sql, [id], (err, results) => {
@@ -140,8 +140,9 @@ const createComplain = (req, res) => {
 
     if (userData) {
         try {
+            let report_id = Math.floor(Math.random() * 9900999999);
             const sql = `
-            SELECT * FROM realEstate.re_property WHERE id = ?;
+            SELECT * FROM ecommerce.ec_complaint WHERE report_id = ?;
           `;
 
             db.query(sql, [id], (err, results) => {
@@ -152,16 +153,16 @@ const createComplain = (req, res) => {
                 const {title ,  name, complain, number } = req.body
                
                 const user_id = userData.user_id
-                let report_id = Math.floor(Math.random() * 9900999999);
+                
                 const  aacount_id = userData.account_id
                 console.log('This is the Report number ',report_id);
-                db.query('INSERT INTO realEstate.re_complaint SET ?', { title , user_id,  name, complain, number,  aacount_id, report_id });
+                db.query('INSERT INTO ecommerce.ec_complaint SET ?', { title , user_id,  name, complain, number,  aacount_id, report_id });
 
                 res.redirect('/user/complaints')
             })
 
         } catch (error) {
-            console.log('Archive Form Error :', error)
+            console.log('Complaint Form Error :', error)
         }
 
     } else {

@@ -1,5 +1,5 @@
 <div class="container p-2">
-    <% if (userProp.id==null) { %>
+    <% if (userProd.id==null) { %>
         <br> <br>
         <h3 class="m-5 text-center mb-5">There is no recorded property at the moment</h3>
         <% } else{%>
@@ -14,21 +14,21 @@
                         </li>
 
                         <li><a class="dropdown-item" href="#"><i class="bi bi-calendar-week"></i>: <%= new
-                                    Date(userProp.created_at).toLocaleString('en-GB',{year : 'numeric' , month:'short',
+                                    Date(userProd.created_at).toLocaleString('en-GB',{year : 'numeric' , month:'short',
                                     day :'2-digit'}) %> ||
-                                    <%= new Date(userProp.created_at).toLocaleTimeString() %></a>
+                                    <%= new Date(userProd.created_at).toLocaleTimeString() %></a>
                         </li>
                         <li>
-                            <a href="/user/save/<%= userProp.id %>" class="dropdown-item"> <i
+                            <a href="/user/cart/<%= userProd.id %>" class="dropdown-item"> <i
                                     class="bi bi-folder-plus"></i>Archive It</a>
                         </li>
-                        <li><a class="dropdown-item" href="#">Location : <%= userProp.location %></a></li>
+                        <li><a class="dropdown-item" href="#">Location : <%= userProd.location %></a></li>
                     </ul>
                 </div>
 
                 <div class="card-body">
                     <h5 class="card-title text-center"> <b class="text-capitalize">Title :
-                        <%= userProp.title %>
+                        <%= userProd.title %>
                     </b></h5>
 
 
@@ -40,12 +40,12 @@
                            <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
                             
                             <div class="carousel-inner">
-                                <% if (userProp.picture) { %>
-                                    <% let pixz = userProp.picture.split(',') %>
+                                <% if (userProd.picture) { %>
+                                    <% let pixz = userProd.picture.split(',') %>
                                     
                                     <div class="carousel-item active" style="width: 790px; height: 390px;">
-                                        <a href="/prop/<%= pixz[0] %>">
-                                         <img src="/prop/<%= pixz[0] %>" class="d-block w-100" alt="Product Image">
+                                        <a href="/products/<%= pixz[0] %>">
+                                         <img src="/products/<%= pixz[0] %>" class="d-block w-100" alt="Product Image">
                                         </a>
                                      </div>
                                      <% let num = 0 %>
@@ -53,15 +53,18 @@
                                         <% const pizzy = pixz.splice(1) %>
                                         <% pizzy.forEach(trans=> { %>
                                             <div class="carousel-item" style="width: 790px; height: 390px;">
-                                                <a href="/prop/<%= trans %>">
-                                                 <img src="<%= trans ? '/prop/'+trans : '/assets/img/card.jpg' %>" class="d-block w-100" alt="Product Image">
+                                                <a href="/products/<%= trans %>">
+                                                 <img src="<%= trans ? '/products/'+trans : '/assets/img/card.jpg' %>" class="d-block w-100" alt="Product Image">
                                                 </a>
                                              </div>
                                         <% }) %>
+                                       
                                     <% } %>
                                      
                                     
                                  
+                                <% } else{ %>
+                                        <img src="/assets/img/card.jpg" class="d-block w-100" alt="Property Image">
                                 <% } %>
                                                                 
                             </div>
@@ -82,17 +85,17 @@
                         <div class="col-lg-3 mb-3">
                            
                             <h5 class="card-title mt-3">Location : <span>
-                                    <%= userProp.location %>
+                                    <%= userProd.location %>
                                 </span></h5>
                             <h5 class="card-title mt-3 text-capitalize">property category : <span>
-                                    <%= userProp.category %>
+                                    <%= userProd.category %>
                                 </span></h5>
                             <h5 class="card-title"> Price :<span>
-                                    <%= userProp.price %> NGN
+                                    <%= userProd.price %> NGN
                                 </span></h5>
 
                             <h5 class="card-title"> <span>Created - <%= new
-                                        Date(userProp.created_at).toLocaleString('en-GB',{year : 'numeric' ,
+                                        Date(userProd.created_at).toLocaleString('en-GB',{year : 'numeric' ,
                                         month:'short', day :'2-digit'}) %></span></h5>
                         </div>
 
@@ -101,8 +104,8 @@
                     <div class="d-flex align-items-center">
 
                         <div class="ps-3">
-                            <% if (userProp.description) { %>
-                                <% userProp.description.split('\n').forEach(function(line) { %>
+                            <% if (userProd.description) { %>
+                                <% userProd.description.split('\n').forEach(function(line) { %>
                                     <% if (line.trim()) { %>
 
                                         <%- line %>

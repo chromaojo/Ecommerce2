@@ -1,5 +1,5 @@
 const info = {
-    name : 'Real estate plc',
+    name : 'Ecommerce Pluz',
     address : 'Plot 8, No Address Street, Lagos Island',
     phone: '090XXXXXXXX',
     phone1: '08098765432',

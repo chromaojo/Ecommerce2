@@ -1,9 +1,10 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = 8088;
+const port = 9088;
 const expressLayouts = require('express-ejs-layouts');
 const cookieParser = require('cookie-parser');
+const { UserLoggin, CustomerRole, AdminRoleBased } = require('./server/auth/auth');
 
 
 
@@ -20,12 +21,22 @@ app.use(cookieParser());
 app.use('/db', require('./server/config/table'));
 
 app.use('', require('./server/routes/pages'));
-app.use('/user', require('./server/routes/customer'));
-app.use('/admin', require('./server/routes/admin'));
+
+if (CustomerRole) {
+    app.use('/user', require('./server/routes/customer'));
+} else if (AdminRoleBased) {
+    
+    app.use('/admin', require('./server/routes/admin'));
+
+} else {
+
+}
 
 
 
 
-app.listen(port, ()=>{
+
+
+app.listen(port, () => {
     console.log(`App Running on ${port}`);
 })

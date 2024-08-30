@@ -4,7 +4,7 @@ const AvoidIndex = (req, res, next)=>{
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     
-    if (userCookie){
+    if (userCookie){ 
         
         return res.status(401).redirect('/user/dashboard');
         
@@ -12,6 +12,20 @@ const AvoidIndex = (req, res, next)=>{
         return next();
     }
 };
+
+const CustomerRole = (req, res, next)=>{
+    
+    const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
+    req.app.set('userData', userCookie);
+    
+    if (userCookie.role === 'client'){ 
+        return next();
+    } else{
+        return res.status(401).redirect('/user/logout');
+    }
+};
+
+
 
 const UserLoggin = (req, res, next)=>{
     
@@ -39,4 +53,4 @@ const AdminRoleBased = (req, res, next)=>{
     }
 };
 
-module.exports = {UserLoggin, AvoidIndex, AdminRoleBased}
+module.exports = {UserLoggin, AvoidIndex, AdminRoleBased, CustomerRole }

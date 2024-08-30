@@ -3,7 +3,6 @@ const route = express.Router();
 const info = require('../config/info')
 const path = require("path");
 const db = require('../config/db');
-const bcrypt = require('bcryptjs');
 const { UserLoggin, AvoidIndex, AdminRoleBased } = require('../auth/auth');
 const random = Math.floor(Math.random() * 99999);
 const rando = Math.floor(Math.random() * 99999);
@@ -15,16 +14,15 @@ const session = require('express-session');
 
 
 
-// To View All Saved for one person
-const allSaved = (req, res) => {
+// To View All Cart for one person
+const allCart = (req, res) => {
 
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
     const userId = userCookie.user_id
-
     if (userCookie) {
         const sql = `
-      SELECT * FROM realEstate.re_saved WHERE user_id = ? ORDER BY id DESC;
+      SELECT * FROM ecommerce.ec_Cart WHERE user_id = ? ORDER BY id DESC;
     `;
 
         db.query(sql, [userId], (err, results) => {
@@ -36,9 +34,9 @@ const allSaved = (req, res) => {
 
             if (results) {
 
-                const userSaved = results
+                const userCart = results
                 const userData = userCookie
-                return res.render('saved-all', { userData, userSaved, info });
+                return res.render('cart-all', { userData, userCart, info});
             }
 
         })
@@ -51,9 +49,9 @@ const allSaved = (req, res) => {
 
 
 
-// To view only one saved 
+// To view only one Cart 
 
-const oneSaved = (req, res) => {
+const oneCart = (req, res) => {
 
     const id = req.params.id;
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
@@ -63,7 +61,7 @@ const oneSaved = (req, res) => {
         res.redirect('/logout');
     } else {
         const sql = `
-      SELECT * FROM realEstate.re_saved WHERE id =?;
+      SELECT * FROM ecommerce.ec_Cart WHERE id =?;
     `;
 
         db.query(sql, [id], (err, results) => {
@@ -74,9 +72,9 @@ const oneSaved = (req, res) => {
             console.log('This is the dashboard Details : ', userData);
 
             if (results) {
-                const userSaved = results[0]
-                console.log('Saved Items', userSaved)
-                res.render('Saved-one', { userData, userSaved, info });
+                const userCart = results[0]
+                console.log('Cart Items', userCart)
+                res.render('Cart-one', { userData, userCart, info });
             }
 
         })
@@ -85,8 +83,8 @@ const oneSaved = (req, res) => {
 
 
 
-// To Post shipment form from the frontend 
-const createSaved = (req, res, next) => {
+// To Post cart from the frontend 
+const createCart = (req, res, next) => {
     const id = req.params.id;
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
 
@@ -94,24 +92,49 @@ const createSaved = (req, res, next) => {
 
     if (userData) {
         try {
+
+
+
             const sql = `
-            SELECT * FROM realEstate.re_property WHERE id = ?;
+            SELECT * FROM ecommerce.ec_products WHERE id = ?;
           `;
 
-            db.query(sql, [id], (err, results) => {
+            db.query(sql, [id], (err, result) => {
                 if (err) {
                     console.log('Login Issues :', err);
                     return res.status(500).send('Internal Server Error');
                 }
-                const {title ,  price, location, picture, prop_id } = results[0]
-                const pro_link ='/user/property-zZkKqQP/'+id;
-                const user_id = userData.user_id
-               
-                
-                console.log('This is the propertyprice ',price);
-                db.query('INSERT INTO realEstate.re_saved SET ?', { title , location, pro_link, price, user_id, picture, prop_id });
 
-                return next();
+                const { title, price, picture, prod_id, quantity } = result[0]
+                const sql = `
+            SELECT prod_id FROM ecommerce.ec_cart WHERE prod_id = ?;
+          `;
+
+
+                db.query(sql, [prod_id], (err, results) => {
+                    if (err) {
+                        console.log('Login Issues :', err);
+                        return res.status(500).send('Internal Server Error');
+                    }
+                    if (results.length > 0) {
+                        const messages= 'Product Already Added To Cart'
+                        const link = '/user/dashboard'
+                        res.render('warning',{messages, userData, info, link})
+                    } else { 
+
+                        const pro_link = '/user/product-zZkKqQP/' + id;
+                        const user_id = userData.user_id
+
+                        console.log('This is the product price ', price);
+                        // Try To check if the product has already been added before  before inserting
+                        db.query('INSERT INTO ecommerce.ec_cart SET ?', { title, pro_link, price, user_id, quantity ,picture, prod_id });
+
+                        return next();
+                    }
+                })
+                // This is the end 
+
+                
             })
 
         } catch (error) {
@@ -140,10 +163,10 @@ const UserLoggi = (req, res, next) => {
 };
 
 
-// To delete a saved content
+// To delete a Cart content
 
 
-const deleteSaved = (req, res, next) => {
+const deleteCart = (req, res, next) => {
 
     const userCookie = req.cookies.user ? JSON.parse(req.cookies.user) : null;
     req.app.set('userData', userCookie);
@@ -151,23 +174,23 @@ const deleteSaved = (req, res, next) => {
     if (userCookie) {
 
         try {
-            const id = req.params.id;
+            const id = req.params.prod_id;
             // Perform the deletion
-            const sql = `DELETE FROM realEstate.re_saved WHERE prop_id = ?;`;
+            const sql = `DELETE FROM ecommerce.ec_cart WHERE prod_id = ?;`;
             db.query(sql, [id], (err, result) => {
                 if (err) {
-                    console.error('Error deleting saved:', err);
+                    console.error('Error deleting Cart:', err);
                     return res.status(500).send('Internal Server Error');
                 }
                 // Check if any rows were affected
                 if (result.affectedRows === 0) {
-                    return res.status(404).send('saved content not deleted');
+                    return res.status(404).send('Cart content not deleted');
                 }
-                return next();  
+                return next();
 
             });
 
-            
+
         } catch (err) {
             console.error('Error handling /delete-task-content/:id route:', err);
             res.status(500).send('Internal Server Error');
@@ -175,10 +198,10 @@ const deleteSaved = (req, res, next) => {
 
 
     } else {
-        res.send('Cannot Delete This saved')
+        res.send('Cannot Delete This Cart')
     }
 };
 
 
 
-module.exports = { oneSaved, allSaved, deleteSaved, createSaved }
+module.exports = { oneCart, allCart, deleteCart, createCart }
